@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".settingFragment"
+    android:background="@color/theme"
+
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_corner"
+        android:layout_marginTop="30dp"
+        >
+
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thông tin điện thoại"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:id="@+id/phoneName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên điện thoại"
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            />
+        <TextView
+            android:id="@+id/Osversion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="phiên bản android "
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            />
+        <TextView
+            android:id="@+id/Sdkversion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SDKVersion "
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            />
+        <TextView
+            android:id="@+id/combanyName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên công ty sản xuất "
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            />
+        <TextView
+            android:id="@+id/brand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thương hiệu "
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thông tin Internet"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            />
+        <TextView
+            android:id="@+id/speed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="tốc độ mạng "
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            />
+        <TextView
+            android:id="@+id/ipv4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ipv4 "
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            />
+        <TextView
+            android:id="@+id/ipv6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ipv6 "
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            />
+    </LinearLayout>
+</FrameLayout>

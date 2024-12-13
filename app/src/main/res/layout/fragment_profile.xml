@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".profileFragment"
+    android:background="@color/theme"
+    android:paddingTop="30dp"
+    android:paddingLeft="10dp"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Các ứng dụng dùng trong 24h qua"
+            android:textSize="25sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:background="@drawable/rounded_corner"
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="10dp"
+            />
+    </LinearLayout>
+
+</FrameLayout>
