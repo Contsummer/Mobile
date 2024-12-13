@@ -30,5 +30,8 @@ public interface Api {
 
     @POST("/api/Appdata/appdata")
     Call<List<Appdata>> loadData(@Body int week);
-
+    @POST("/api/Appdata/save")
+    Call<String> save(@Body List<Appdata> appdata);
+    @POST("/api/Appdata/appdataName")
+    Call<List<Appdata>> getdataname(@Body String appdata);
 }

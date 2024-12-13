@@ -20,7 +20,7 @@ import javax.net.ssl.X509TrustManager;
 import okhttp3.logging.HttpLoggingInterceptor; // Đảm bảo import đúng gói
 
 public class RetrofitClient {
-    private static final String BASE_URL = "https://172.22.4.240:5000";
+    private static final String BASE_URL = "https:/192.168.238.87:5000";
     private static Retrofit retrofit = null;
 
     private static OkHttpClient getUnsafeOkHttpClient() {

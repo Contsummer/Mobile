@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,11 +22,20 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.doanmobile.Model.AppUsage;
+import com.example.doanmobile.Model.Appdata;
+import com.example.doanmobile.Model.LoginRespon;
 import com.example.doanmobile.Model.UsageStatsAdapter;
 import com.example.doanmobile.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,19 +55,42 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
             startActivity(intent);
         }
+        Calendar calendar = Calendar.getInstance();
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
+    if (dayOfWeek == Calendar.MONDAY) {
 
+            calendar.add(Calendar.WEEK_OF_YEAR, -5);
+            long starttime =  calendar.getTimeInMillis();
+
+             calendar.add(Calendar.WEEK_OF_YEAR, +2);
+            long endtime =  calendar.getTimeInMillis();
+           List<Appdata> data =  getUsageStats(starttime,endtime );
+        Log.d("Testdata", "onCreate: "  + data.size());
+        Collections.sort(data, (a, b) -> Long.compare(b.getTotalTimeUsed(), a.getTotalTimeUsed()));
+        data = new ArrayList<>(data.subList(0, 10));
+        if(data.size() >0){
+            Api apiService = RetrofitClient.getApiService();
+            Call<String> call = apiService.save(data);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if (response.isSuccessful()) {
+                        Log.d("Main Response", "onResponse: " + response.body());
+                    } else {
+                        Log.e("API Error", "Error: " + response.code() + " - " + response.message());
+                    }
+                }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.e("API Error", "Failure: " + t.getMessage());
+                }
+            });
+        }
+    }
         WindowInsetsControllerCompat windowInsetsController =
                 new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
         windowInsetsController.setAppearanceLightStatusBars(true);
-
-
-
-
-
-
-
-
 
         replaceFragment(new homeFragment());
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -70,38 +103,6 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-    }
-    private void getUsageStats(long start, long end) {
-        UsageStatsManager usm = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        PackageManager pm = getPackageManager();
-        long duration = end - start;
-        int interval;
-        if (duration <= 86400000) {
-            interval = UsageStatsManager.INTERVAL_DAILY;
-        } else if (duration > 86400000 && duration <= 604800000) {
-            interval = UsageStatsManager.INTERVAL_WEEKLY;
-        } else if (duration > 604800000 && duration <= 2627136000L) {
-            interval = UsageStatsManager.INTERVAL_MONTHLY;
-        } else {
-            interval = UsageStatsManager.INTERVAL_YEARLY;
-        }
-
-        List<UsageStats> stats = usm.queryUsageStats(interval, start, end);
-        if (stats != null && !stats.isEmpty()) {
-            for (UsageStats usageStats : stats) {
-                String packageName = usageStats.getPackageName();
-                long totalTimeInForeground = usageStats.getTotalTimeInForeground();
-                if (duration <= 86400000) {
-                    addAppUsageToList(packageName, pm, totalTimeInForeground);
-                } else if ((duration > 86400000 && duration <= 604800000) && totalTimeInForeground >= 90000) {
-                    addAppUsageToList(packageName, pm, totalTimeInForeground);
-                } else if ((duration > 604800000 && duration <= 2627136000L) && totalTimeInForeground >= 600000) {
-                    addAppUsageToList(packageName, pm, totalTimeInForeground);
-                } else if (duration > 2627136000L && totalTimeInForeground >= 900000) {
-                    addAppUsageToList(packageName, pm, totalTimeInForeground);
-                }
-            }
-        }
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -116,49 +117,51 @@ public class MainActivity extends AppCompatActivity {
         return mode == AppOpsManager.MODE_ALLOWED;
     }
 
-    private void addAppUsageToList(String packageName, PackageManager pm, long totalTimeInForeground) {
-        try {
-         //  if (isSystem(packageName)) return;
-
-            ApplicationInfo appInfo = pm.getApplicationInfo(packageName, 0);
-            String appName = pm.getApplicationLabel(appInfo).toString();
-            Drawable appIcon = pm.getApplicationIcon(appInfo);
-            long minutes = totalTimeInForeground / 60000;
-            long seconds = (totalTimeInForeground % 60000) / 1000;
-            String useTime = minutes + " mins " + seconds + " secs";
-
-            appUsageList.add(new AppUsage(appName, appIcon, useTime, totalTimeInForeground));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    private  List<AppUsage> getUsageStats1(long start, long end) throws PackageManager.NameNotFoundException {
-        UsageStatsManager usm = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        PackageManager pm = getPackageManager();
-         List<AppUsage> appUsageList123 =new ArrayList<>();
-        List<UsageStats> stats = usm.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, start, end);
+    private List<Appdata> getUsageStats(long start, long end) {
+        UsageStatsManager usm = (UsageStatsManager) this.getSystemService(Context.USAGE_STATS_SERVICE);
+        PackageManager pm = this.getPackageManager();
+        List<Appdata> data = new ArrayList<>();
+        List<UsageStats> stats = usm.queryUsageStats(UsageStatsManager.INTERVAL_WEEKLY, start, end);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(start));
+        int weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
+        long totalUsageTime = 0;
         if (stats != null && !stats.isEmpty()) {
-            long min =0;
-            long sec =0;
-            long duration2  =0;
-            String usetime  ="";
             for (UsageStats usageStats : stats) {
+                String packageName = usageStats.getPackageName();
+                long totalTimeInForeground = usageStats.getTotalTimeInForeground();
+                if (totalTimeInForeground >= 10000) {
+                    try {
+                        ApplicationInfo appInfo = pm.getApplicationInfo(packageName, 0);
+                        if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) continue;
+                        String appName = pm.getApplicationLabel(appInfo).toString();
+                        boolean alreadyAdded = false;
 
-                duration2 = usageStats.getTotalTimeInForeground();
-                try {
-                    ApplicationInfo appInfo = pm.getApplicationInfo(usageStats.getPackageName(), 0);
-                    String appName = pm.getApplicationLabel(appInfo).toString();
-                    Drawable appIcon = pm.getApplicationIcon(appInfo);
-                    min= duration2 / 60000;
-                    sec  = (duration2 % 60000) / 1000;
-                    usetime = min+"p"+sec+"g";
-                    appUsageList123.add(new AppUsage(appName,appIcon,usetime,duration2));
-                } catch (PackageManager.NameNotFoundException e) {
-                    throw new RuntimeException(e);
+                        for (Appdata appUsage : data) {
+                            if (appUsage.getAppName().equals(appName)) {
+                                alreadyAdded = true;
+                                break;
+                            }
+                        }
+
+                        if (!alreadyAdded) {
+                            long minutes = totalTimeInForeground / 60000;
+                            long seconds = (totalTimeInForeground % 60000) / 1000;
+
+                            data.add(new Appdata(appName ,weekOfYear, start , totalTimeInForeground  , packageName));
+                        }
+
+                        totalUsageTime += totalTimeInForeground;
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+            Log.d("TotalUsageTime", String.valueOf(totalUsageTime));
         }
-        return appUsageList123;
+
+        return data;
     }
 
 

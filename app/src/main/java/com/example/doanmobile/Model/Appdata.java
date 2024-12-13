@@ -5,11 +5,18 @@ public class Appdata {
     private String PackageAppName;
     private long WeekStartTime ;
     private long TotalTimeUsed;
-    private  int LaunchCount ;
     private  int WeekNumber ;
 
     public String getAppName() {
         return AppName;
+    }
+
+    public Appdata(String appName, int weekNumber,  long weekStartTime, long totalTimeUsed, String packageAppName) {
+        AppName = appName;
+        WeekNumber = weekNumber;
+        WeekStartTime = weekStartTime;
+        TotalTimeUsed = totalTimeUsed;
+        PackageAppName = packageAppName;
     }
 
     public void setAppName(String appName) {
@@ -40,13 +47,6 @@ public class Appdata {
         TotalTimeUsed = totalTimeUsed;
     }
 
-    public int getLaunchCount() {
-        return LaunchCount;
-    }
-
-    public void setLaunchCount(int launchCount) {
-        LaunchCount = launchCount;
-    }
 
     public int getWeekNumber() {
         return WeekNumber;

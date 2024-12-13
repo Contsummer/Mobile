@@ -116,7 +116,26 @@
                 tmp = getUsageStatsDetail(time.get(i), time.get(i + 1), appName);
                 Bigdata.add(tmp);
             }
-            getData(3);
+            List<Appdata> data = new ArrayList<>();
+            Api apiService = RetrofitClient.getApiService();
+            Call<List<Appdata>> call  = apiService.getdataname(appName);
+             call.enqueue(new Callback<List<Appdata>>() {
+                 @Override
+                 public void onResponse(Call<List<Appdata>> call, Response<List<Appdata>> response) {
+                    if(response.isSuccessful()){
+                        Log.d("TAG Successful ", "onResponse: ");
+                    }else{
+                        Log.d("TAG fail ", "onResponse: ");
+
+                    }
+
+                }
+
+                 @Override
+                 public void onFailure(Call<List<Appdata>> call, Throwable t) {
+
+                 }
+             });
             calendar = Calendar.getInstance();
             calendar.add(Calendar.YEAR, -1);
             long sixMonthAgo = calendar.getTimeInMillis();
@@ -232,11 +251,6 @@
                     Log.d("tesst reponse", "onResponse: " );
                 }
             });
-
-
-
-
-
             return data;
 
 

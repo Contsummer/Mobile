@@ -84,8 +84,8 @@ public class homeFragment extends Fragment {
         List<DataEntry> datachart = new ArrayList<>();
         List<AppUsage> data = getUsageStats(WeekBefforre,Now);
         Collections.sort(data, (a, b) -> Long.compare(b.getTime(), a.getTime()));
-
         data = new ArrayList<>(data.subList(0, 10));
+
         for (AppUsage appUsage : data) {
              datachart.add(new ValueDataEntry(appUsage.getAppName(),appUsage.getTime()/1000/60 ));
             }
@@ -165,6 +165,8 @@ public class homeFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+
 
 
 
