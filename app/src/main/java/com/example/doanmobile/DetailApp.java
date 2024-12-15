@@ -21,6 +21,12 @@
     import android.widget.ImageView;
     import android.widget.TextView;
 
+    import com.anychart.AnyChart;
+    import com.anychart.AnyChartView;
+    import com.anychart.chart.common.dataentry.DataEntry;
+    import com.anychart.chart.common.dataentry.ValueDataEntry;
+    import com.anychart.charts.Cartesian;
+    import com.anychart.data.Set;
     import com.example.doanmobile.Model.AppUsage;
     import com.example.doanmobile.Model.Appdata;
 
@@ -52,8 +58,8 @@
         private String mParam1;
         private String mParam2;
         private ImageView app_icon;
-        private TextView app_name, totalTime, LastUse, packageName, setSdkVersion, minSdkVersion, firstInstallTime;
-
+        private TextView app_name, totalTime, LastUse, packageName, setSdkVersion, minSdkVersion  , textView5 ;
+        private AnyChartView anyChartView;
         public DetailApp() {
             // Required empty public constructor
         }
@@ -96,6 +102,9 @@
             packageName = rootView.findViewById(R.id.packageName);
             setSdkVersion = rootView.findViewById(R.id.setSdkVersion);
             minSdkVersion = rootView.findViewById(R.id.minSdkVersion);
+
+            textView5 = rootView.findViewById(R.id.textView5);
+            anyChartView = rootView.findViewById(R.id.any_chart_view);
             List<Long> time = new ArrayList<Long>();
             Bundle bundle = getArguments();
             String appName = "";
@@ -116,14 +125,44 @@
                 tmp = getUsageStatsDetail(time.get(i), time.get(i + 1), appName);
                 Bigdata.add(tmp);
             }
-            List<Appdata> data = new ArrayList<>();
             Api apiService = RetrofitClient.getApiService();
             Call<List<Appdata>> call  = apiService.getdataname(appName);
              call.enqueue(new Callback<List<Appdata>>() {
                  @Override
                  public void onResponse(Call<List<Appdata>> call, Response<List<Appdata>> response) {
                     if(response.isSuccessful()){
-                        Log.d("TAG Successful ", "onResponse: ");
+                        List<Appdata> data = response.body();
+                        List<DataEntry> dataChart = new ArrayList<>();
+                        long temp = 0;
+                        for (Appdata appUsage : data) {
+                            int weekNumber = appUsage.getWeekNumber();
+                            long timeUsedInMinutes = appUsage.getTotalTimeUsed() / 60 / 1000;
+                            temp+=timeUsedInMinutes;
+                            dataChart.add(new ValueDataEntry(String.valueOf(weekNumber), timeUsedInMinutes));
+                        }
+                        temp = temp/data.size();
+                        textView5.setText("Thời gian dùng trung bình tuần " +temp +" phút");
+                        Cartesian cartesian = AnyChart.line();
+                        Set set = Set.instantiate();
+                        set.data(dataChart);
+                        cartesian.data(dataChart);
+                        cartesian.xAxis(0).labels().fontColor("#FFFFFF");                        cartesian.xAxis(0).title("Tuần");
+                        cartesian.yAxis(0).labels().fontColor("#FFFFFF");                        cartesian.xAxis(0).title("Tuần");
+                        cartesian.yAxis(0).labels().fontWeight(700);
+                        cartesian.xAxis(0).labels().fontWeight(700);
+                        cartesian.xAxis(0).title("Tuần");
+                        cartesian.xAxis(0).title().fontColor("White");
+                        cartesian.yAxis(0).title("Phút");
+                        cartesian.yAxis(0).title().fontColor("White");
+                        cartesian.animation(true);
+                        cartesian.yAxis(0).labels().fontWeight(1000);
+                        cartesian.xAxis(0).labels().fontWeight(1000);
+                        cartesian.padding(10d, 20d, 5d, 20d);
+                        cartesian.crosshair().enabled(true);
+                        cartesian.background().fill("#202042");
+                        anyChartView.setChart(cartesian);
+
+
                     }else{
                         Log.d("TAG fail ", "onResponse: ");
 

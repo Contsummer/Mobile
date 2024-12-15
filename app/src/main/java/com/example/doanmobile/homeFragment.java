@@ -94,6 +94,7 @@ public class homeFragment extends Fragment {
         button3.setOnClickListener(v -> sendData());
         Cartesian cartesian = AnyChart.column();
         Column column = cartesian.column(datachart);
+
         column.tooltip()
                 .titleFormat("{%X}")
                 .position(Position.CENTER_BOTTOM)
@@ -122,9 +123,7 @@ public class homeFragment extends Fragment {
         adapter = new UsageStatsAdapterMini(data);
         recyclerView1.setAdapter(adapter);
         return rootView;
-
     }
-
     private List<AppUsage> getUsageStats(long start, long end) {
         UsageStatsManager usm = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
         PackageManager pm = getActivity().getPackageManager();
@@ -142,7 +141,6 @@ public class homeFragment extends Fragment {
             }
             Log.d("timeer",  String.valueOf(timeer));
             return  data;
-
         }
         return  new ArrayList<>();
     }
