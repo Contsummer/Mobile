@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "com.example.doanmobile"
-    compileSdk = 34
+    compileSdk = 30
 
     defaultConfig {
         applicationId = "com.example.doanmobile"
-        minSdk = 30
-        targetSdk = 34
+        minSdk = 28
+        targetSdk = 30
         versionCode = 1
         versionName = "1.0"
 
