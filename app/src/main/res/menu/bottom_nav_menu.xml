@@ -3,6 +3,6 @@
 
     <item android:title="Home" android:id="@+id/home"
         android:icon="@drawable/baseline_add_home_24"/>
-    <item android:title="Profile"  android:id="@+id/profile" android:icon="@drawable/profile_24"/>
-    <item android:title="Setting"  android:id="@+id/setting" android:icon="@drawable/baseline_app_settings_alt_24" />
+    <item android:title="Danh sách ứng dụng"  android:id="@+id/profile" android:icon="@drawable/profile_24"/>
+    <item android:title="Thông tin điện thoại "  android:id="@+id/setting" android:icon="@drawable/baseline_app_settings_alt_24" />
 </menu>

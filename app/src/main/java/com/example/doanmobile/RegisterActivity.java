@@ -65,12 +65,14 @@ public class RegisterActivity extends AppCompatActivity {
             if(response.body() !=null){
                 LoginRespon loginResponse = response.body();
                 if(!loginResponse.getStatus().equals("success")) {
-                    Toast.makeText(RegisterActivity.this, "Lỗi đăng ký , email hoặc user name đã tồn tại  ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Lỗi đăng ký , email hoặc user name đã tồn tại  ", Toast.LENGTH_LONG).show();
                     return;
                 } ;
-                Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "đăng ký thành công  successful!", Toast.LENGTH_LONG).show();
                 navigateToHomeActivity();
             }
+                Toast.makeText(RegisterActivity.this, "đăng ký thành công  successful!", Toast.LENGTH_LONG).show();
+
             }
 
             @Override

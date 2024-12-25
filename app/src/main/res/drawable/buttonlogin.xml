@@ -1,0 +1,8 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#c9bebe" /> <!-- Màu nền -->
+    <corners android:radius="10dp" />    <!-- Góc vuông -->
+    <size
+        android:width="100dp"
+        android:height="50dp" />       <!-- Kích thước hình vuông -->
+
+</shape>

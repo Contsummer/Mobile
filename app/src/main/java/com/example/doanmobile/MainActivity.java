@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
-    if (dayOfWeek == Calendar.MONDAY) {
+    if (dayOfWeek != Calendar.MONDAY) {
 
             calendar.add(Calendar.WEEK_OF_YEAR, -5);
             long starttime =  calendar.getTimeInMillis();
